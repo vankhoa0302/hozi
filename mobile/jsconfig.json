@@ -1,0 +1,21 @@
+{
+    "compilerOptions": {
+      "baseUrl": ".",
+      "paths": {
+        "@navigators": ["./src/navigators/*"],
+        "@components": ["./src/components/*"],
+        "@components/*": ["./src/components/*"],
+        "@screens/*": ["./src/screens/*"],
+        "@utils/*": ["src/utils/*"],
+        "@config": ["./src/config"],
+        "@assets/*": ["./src/assets/*"],
+        "@redux/*": ["./src/redux/*"],
+        "@common/*": ["./src/common/*"],
+        "@modules/*": ["./src/modules/*"],
+        "@data/*": ["./src/data/*"],
+
+
+      }, 
+    },
+    "exclude": ["node_modules"]
+  }
