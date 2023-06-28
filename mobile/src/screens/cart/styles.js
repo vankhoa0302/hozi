@@ -17,11 +17,8 @@ export const styles = StyleSheet.create({
         fontSize: SIZES.h4,
     },
     checkoutContainer: {
-        backgroundColor: '#557477',
         flexDirection: 'row',
-        alignItems: 'center',
-        borderRadius: 50,
-        paddingVertical: 10,
+        borderRadius: 38,
         marginHorizontal: 15,
         justifyContent: 'center',
         marginBottom: 12,
@@ -29,7 +26,6 @@ export const styles = StyleSheet.create({
     checkoutText: {
         color: Theme.COLORS.white,
         fontSize: SIZES.h4,
-
     },
 
 

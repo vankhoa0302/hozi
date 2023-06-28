@@ -6,7 +6,7 @@
         "@components": ["./src/components/*"],
         "@components/*": ["./src/components/*"],
         "@screens/*": ["./src/screens/*"],
-        "@utils/*": ["src/utils/*"],
+        "@utils/*": ["./src/utils/*"],
         "@config": ["./src/config"],
         "@assets/*": ["./src/assets/*"],
         "@redux/*": ["./src/redux/*"],

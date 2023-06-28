@@ -4,18 +4,17 @@
 /* eslint-disable no-dupe-keys */
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage'
-console.log(process.env.API_URL);
+console.log(process.env.API_URL)
 const axiosService = axios.create({
     baseURL: process.env.API_URL,
     headers: {
         'Content-Type': 'application/json',
-        'Content-Type': 'multipart/form-data',
     },
 });
 
 axiosService.interceptors.request.use(
     async (config) => {
-        const token = await AsyncStorage.getItem('@User_token');
+        const token = await AsyncStorage.getItem('token');
         if (token) {
             config.headers.Authorization = token;
         }
@@ -32,13 +31,14 @@ axiosService.interceptors.response.use(
     },
     async (error) => {
         const originalRequest = error.config;
-        const token = await AsyncStorage.getItem('@User_token');
-
+        const token = await AsyncStorage.getItem('token');
+        console.log(error.response.status);
         if (token) {
             if (error.response.status === 401 && !originalRequest._retry) {
                 AsyncStorage.clear();
+            } else {
+                return Promise.reject(error.response.data);
             }
-            return Promise.reject(error.response.data);
         } else {
             return Promise.reject(error.response.data);
         }

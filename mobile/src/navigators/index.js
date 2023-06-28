@@ -11,6 +11,9 @@ import SearchScreen from '@screens/search';
 import ProductDetail from '@screens/productDetail';
 import ShippingAddressScreen from '@screens/shipping address';
 import CheckoutScreen from '@screens/checkout';
+import LoginScreen from '@screens/auth/LoginScreen';
+import RegisterScreen from '@screens/auth/RegisterScreen';
+import { Router } from './router';
 
 function AppNavigator() {
   const Stack = createNativeStackNavigator();
@@ -23,13 +26,14 @@ function AppNavigator() {
           animation: 'fade_from_bottom'
         }}
       >
-        <Stack.Screen name='Main' component={BottomTab} />
-        <Stack.Screen name='CartScreen' component={CartScreen} />
-        <Stack.Screen name='SearchScreen' component={SearchScreen} />
-        <Stack.Screen name='ProductDetail' component={ProductDetail} />
-        <Stack.Screen name='ShippingAddresses' component={ShippingAddressScreen} />
-        <Stack.Screen name='Checkout' component={CheckoutScreen} />
-
+        <Stack.Screen name='BottomTab' component={BottomTab} />
+        <Stack.Screen name={Router.CartScreen} component={CartScreen} />
+        <Stack.Screen name={Router.SearchScreen} component={SearchScreen} />
+        <Stack.Screen name={Router.ProductDetailScreen} component={ProductDetail} />
+        <Stack.Screen name={Router.ShippingAddressScreen} component={ShippingAddressScreen} />
+        <Stack.Screen name={Router.CheckOutScreen} component={CheckoutScreen} />
+        <Stack.Screen name={Router.Login} component={LoginScreen} />
+        <Stack.Screen name={Router.Register} component={RegisterScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );

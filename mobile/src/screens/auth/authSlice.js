@@ -3,11 +3,15 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axiosService from '@modules/axiosService'
 //fetch login
 const Login = (options) => {
-    let url = `/login`;
-    return axiosService.post(url, options);
+    let url = `/oauth/token`;
+    return axiosService.post(url, options, {
+        headers: {
+            'Content-Type': 'multipart/form-data',
+        }
+    });
 };
 export const fetchLogin = createAsyncThunk(
-    "auth/fetchLogin",
+    'auth/fetchLogin',
     async (options) => {
         let res = await Login(options);
         return res;
@@ -16,7 +20,7 @@ export const fetchLogin = createAsyncThunk(
 //fetch logout user
 const logoutUser = (options) => {
     let url = `/user/logout`;
-    return axiosService.post(url, options);
+    return axiosService.get(url, options);
 };
 export const fetchLogout = createAsyncThunk(
     'auth/fetchLogout',
@@ -41,11 +45,21 @@ export const authSlice = createSlice({
     name: 'auth',
     initialState: {
         token: '',
+        errorLogin: false,
+        isLogin: false,
+        isAuthLoading: false,
     },
     reducers: {
         isAuth: (state, action) => {
             state.token = action.payload;
-
+        },
+    },
+    extraReducers: {
+        [fetchLogin.fulfilled]: (state, { payload }) => {
+            state.isLogin = true;
+        },
+        [fetchLogout.fulfilled]: (state, { payload }) => {
+            state.isLogin = false;
         },
     }
 })

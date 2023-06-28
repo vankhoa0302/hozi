@@ -24,7 +24,7 @@ const ShippingAddressScreen = () => {
     }
     const _renderItem = ({ item }) => {
         return (
-            <TouchableOpacity style={styles.shippingAddItem}>
+            <TouchableOpacity activeOpacity={.5} style={styles.shippingAddItem}>
                 <View style={{ flexDirection: 'row' }}>
                     <TouchableOpacity style={styles.check} onPress={() => onCheck(item.id)}>
                         <Ionicons name={checked === item.id ? 'checkbox' : 'square-outline'} size={25} color={Theme.COLORS.color1} />

@@ -1,11 +1,10 @@
 /* eslint-disable react-native/no-inline-styles */
 /* eslint-disable prettier/prettier */
-import { Button, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React from 'react'
 import CustomText from '@components/CustomText/CustomText'
-import { Theme, WidthScreen } from '@common/theme'
+import { Theme } from '@common/theme'
 import Ionicons from 'react-native-vector-icons/Ionicons'
-import CustomButton from '@components/CustomButton/CustomButton'
 import { useNavigation } from '@react-navigation/native'
 const CustomHeader = ({ headerName, isBack, rightIcon, onRightPress }) => {
     const navigation = useNavigation();
@@ -19,9 +18,9 @@ const CustomHeader = ({ headerName, isBack, rightIcon, onRightPress }) => {
                     <Ionicons name="chevron-back-outline" size={25} color={Theme.COLORS.accent} />
                 </TouchableOpacity>
             </View>}
-            <View style={{ alignItems: 'center', flex: 1 }}>
+            {headerName && <View style={{ alignItems: 'center', flex: 0.92 }}>
                 <CustomText fontSize={16} bold >{headerName}</CustomText>
-            </View>
+            </View>}
 
             {
                 rightIcon && <View style={styles.back}>

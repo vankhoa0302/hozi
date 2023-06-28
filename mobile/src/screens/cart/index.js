@@ -1,33 +1,33 @@
 /* eslint-disable semi */
 /* eslint-disable prettier/prettier */
-import { FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Alert, FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import Background from '@components/Background';
 import CustomHeader from '@components/CustomHeader.js';
 import CartItem from '@components/CartItem';
-import CustomText from '@components/CustomText/CustomText';
 import CustomButton from '@components/CustomButton/CustomButton';
 import { Theme } from '@common/theme';
 import { PRODUCTS } from '../../data/data';
 import { useNavigation } from '@react-navigation/native';
 import { styles } from './styles';
+import { Router } from '../../navigators/router';
 const CartScreen = () => {
     const [totalAmount, setTotalAmount] = useState(1);
     const [cartItems, setCartItems] = useState([]);
-    const [checked, setChecked] = useState([]);
 
     const navigation = useNavigation();
 
     const handleTrashPress = () => {
+        Alert.alert('Xóa giỏ hàng!', 'Xóa toàn bộ sản phẩm trong giỏ', [
+            {
+                text: 'Hủy',
+                onPress: () => console.log('Cancel Pressed'),
+                style: 'destructive',
+            },
+            { text: 'Xóa', onPress: () => console.log('OK Pressed') },
+        ])
     };
-    const handleOnCheck = (id) => {
-        // const index = checked.findIndex((check) => check == id )
-        if (checked.includes(id)) {
-            setChecked(checked.filter(checks => checks !== id));
-            return;
-        }
-        setChecked(checks => checks.concat(id));
-    };
+
     const onMinus = (item) => {
         if (item?.quantity < 1) {
             return;
@@ -52,12 +52,18 @@ const CartScreen = () => {
         });
         setCartItems(newCartItems);
     };
+    const handleDeleteItem = (id) => {
+        console.log(id)
+    }
+    const handleOnPress = (id) => {
+        navigation.navigate(Router.ProductDetailScreen, { id: id })
+    }
     const _renderItem = ({ item }) => {
         return (
             <CartItem
+                handleOnPress={() => handleOnPress(item.id)}
                 item={item}
-                isCheck={checked.includes(item.id)}
-                onCheck={() => { handleOnCheck(item.id) }}
+                deleteItem={() => { handleDeleteItem(item.id) }}
                 onAdd={() => onAdd(item)}
                 onMinus={() => onMinus(item)}
             />
@@ -77,14 +83,13 @@ const CartScreen = () => {
                     keyExtractor={item => item.id}
                 />
             </View>
-            <TouchableOpacity style={styles.checkoutContainer} onPress={() => navigation.navigate('Checkout')}>
-                <CustomText style={styles.checkoutText}>Thanh toán</CustomText>
-                {/* <View style={{ width: 1, backgroundColor: '#fff', height: '100%', marginHorizontal: 12 }}>
-                </View>
-                <View style={styles.priceContainer}>
-                    <CustomText style={styles.price}></CustomText>
-                </View> */}
-            </TouchableOpacity>
+            <CustomButton
+                label={'Thanh toán'}
+                labelColor={Theme.COLORS.white}
+                color={Theme.COLORS.color2}
+                style={[styles.checkoutContainer]}
+                onPress={() => navigation.navigate(Router.CheckOutScreen)}
+            />
         </Background>
     );
 };

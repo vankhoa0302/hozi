@@ -39,5 +39,8 @@ export const styles = StyleSheet.create({
         marginVertical: 8,
         justifyContent: 'space-between'
 
+    },
+    btnLoginRegister: {
+        borderRadius: 38
     }
 });

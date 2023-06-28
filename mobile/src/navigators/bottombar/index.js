@@ -7,10 +7,14 @@ import HomeScreen from '@screens/home';
 import WishListScreen from '@screens/wishlist';
 import ProfileScreen from '@screens/profile';
 import CategoryScreen from '@screens/category';
+import { useSelector } from 'react-redux';
+import HomeAuth from '@screens/auth/HomeAuth';
 
 const Tab = createBottomTabNavigator();
 
 const BottomTab = () => {
+
+  const isLogin = useSelector(state => state.auth.isLogin);
   return (
     <Tab.Navigator
       screenOptions={{
@@ -55,7 +59,7 @@ const BottomTab = () => {
       />
       <Tab.Screen
         name="Profile"
-        component={ProfileScreen}
+        component={isLogin ? ProfileScreen : HomeAuth}
         options={{
           tabBarIcon: ({ focused }) => (
             <TabBarIcon name={'Profile'} focused={focused} />

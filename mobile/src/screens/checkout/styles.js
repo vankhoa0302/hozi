@@ -25,11 +25,8 @@ export const styles = StyleSheet.create({
         padding: 15
     },
     paymentContainer: {
-        backgroundColor: '#557477',
         flexDirection: 'row',
-        alignItems: 'center',
         borderRadius: 50,
-        paddingVertical: 10,
         marginHorizontal: 15,
         justifyContent: 'center',
         marginBottom: 12,

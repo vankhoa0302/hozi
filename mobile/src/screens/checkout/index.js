@@ -13,6 +13,8 @@ import { PRODUCTS } from '@data/data.js'
 import { useNavigation } from '@react-navigation/native'
 import Divider from '@components/Divider/Divider.js'
 import { TextInput } from 'react-native'
+import CustomButton from '@components/CustomButton/CustomButton'
+import { Router } from '../../navigators/router'
 const CheckoutScreen = () => {
     const navigation = useNavigation();
     const [isEnabled, setIsEnabled] = useState(false);
@@ -21,7 +23,7 @@ const CheckoutScreen = () => {
         <Background>
             <ScrollView>
                 <CustomHeader headerName={'Thanh toán'} isBack={true} />
-                <TouchableOpacity style={styles.address} onPress={() => navigation.navigate('ShippingAddresses')}>
+                <TouchableOpacity style={styles.address} onPress={() => navigation.navigate(Router.ShippingAddressScreen)}>
                     <Ionicons name='location-outline' color={Theme.COLORS.color2} size={24} />
                     <View style={{ marginHorizontal: 8, }}>
                         <CustomText>Địa chỉ nhận hàng</CustomText>
@@ -139,14 +141,12 @@ const CheckoutScreen = () => {
                     </View>
                 </View>
             </ScrollView>
-            <TouchableOpacity style={styles.paymentContainer} onPress={() => navigation.navigate('Checkout')}>
-                <CustomText style={styles.paymentText}>Đặt hàng</CustomText>
-                {/* <View style={{ width: 1, backgroundColor: '#fff', height: '100%', marginHorizontal: 12 }}>
-                </View>
-                <View style={styles.priceContainer}>
-                    <CustomText style={styles.price}></CustomText>
-                </View> */}
-            </TouchableOpacity>
+            <CustomButton
+                label={'Đặt hàng'}
+                labelColor={Theme.COLORS.white}
+                color={Theme.COLORS.color2}
+                style={[styles.paymentContainer]}
+            />
         </Background>
     )
 }

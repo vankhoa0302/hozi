@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { FlatList, StyleSheet, View } from 'react-native';
 import React from 'react';
 import Background from '@components/Background';
 import CustomHeader from '@components/CustomHeader.js';
@@ -10,7 +10,7 @@ const WishListScreen = () => {
   return (
     <Background>
       <CustomHeader headerName={'Yêu thích'} />
-      <View style={{ flex: 1 }}>
+      <View style={{ flex: 1, marginHorizontal: 15 }}>
         <FlatList
           data={PRODUCTS}
           showsVerticalScrollIndicator={false}

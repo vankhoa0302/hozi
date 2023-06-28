@@ -6,8 +6,11 @@ module.exports = {
     [
       'module-resolver',
       {
-        alias: {
-          '@navigators': './src/navigators',
+        "root": [
+          "./src"
+        ],
+        "alias": {
+          '@navigators': './src/navigators/',
           '@components': './src/components',
           '@screens': './src/screens',
           '@utils': './src/utils',

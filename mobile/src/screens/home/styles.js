@@ -17,7 +17,8 @@ export const styles = StyleSheet.create({
         paddingVertical: 12,
         paddingLeft: 12,
         backgroundColor: Theme.COLORS.lightGrey,
-        justifyContent: 'space-between'
+        justifyContent: 'space-between',
+        marginTop: 8
     },
     categoryTitle: {
         flexDirection: 'row',

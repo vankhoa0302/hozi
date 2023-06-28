@@ -5,20 +5,17 @@ import { Theme, WidthScreen } from '@common/theme'
 import CustomText from '@components/CustomText/CustomText'
 import IconButton from '@components/IconButton/index'
 import Ionicons from 'react-native-vector-icons/Ionicons'
-const CartItem = ({ item, isCheck, onCheck, onAdd, onMinus }) => {
-    const handleOnRemove = () => {
-        console.log('first')
-    }
+const CartItem = ({ item, handleOnPress, deleteItem, onAdd, onMinus }) => {
     return (
-        <TouchableOpacity activeOpacity={.7} style={styles.container}>
-            <TouchableOpacity style={styles.check} onPress={onCheck}>
-                <Ionicons name={isCheck ? 'checkbox' : 'square-outline'} size={25} color={Theme.COLORS.color1} />
-            </TouchableOpacity>
+        <TouchableOpacity activeOpacity={.7} style={styles.container} onPress={handleOnPress}>
             <View style={styles.imageArea}>
                 <Image source={item.image} style={styles.itemImg} resizeMode='contain' />
             </View>
             <View style={styles.itemInfo}>
                 <View>
+                    <TouchableOpacity style={styles.check} onPress={deleteItem}>
+                        <Ionicons name={'close-outline'} size={25} color={Theme.COLORS.color1} />
+                    </TouchableOpacity>
                     <CustomText color={Theme.COLORS.sub}>{item.name}</CustomText>
                     <CustomText bold fontSize={16}>{item.category}</CustomText>
                 </View>
@@ -27,7 +24,7 @@ const CartItem = ({ item, isCheck, onCheck, onAdd, onMinus }) => {
 
                     <View style={styles.amount}>
                         <IconButton iconName={'remove'} iconColor={'black'} iconSize={14} onPress={onMinus} />
-                        <CustomText fontSize={16}>{"  "}0{item?.quantity}{"  "}</CustomText>
+                        <CustomText fontSize={16}>{"  "}{item?.quantity}{"  "}</CustomText>
                         <IconButton iconName={'add'} iconColor={'black'} iconSize={14} onPress={onAdd} />
                     </View>
                 </View>
@@ -77,8 +74,10 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
     },
     check: {
-        justifyContent: 'center',
-        marginLeft: 8
+        position: 'absolute',
+        right: 10,
+        top: -5,
+        zIndex: 1
     },
 
 })

@@ -1,34 +1,63 @@
 /* eslint-disable quotes */
 /* eslint-disable prettier/prettier */
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { View, SafeAreaView, TouchableOpacity, ScrollView, Image } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import styles from "./styles";
 import { Theme } from "@common/theme";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import CustomText from "@components/CustomText/CustomText";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchgetProductDetail } from "@screens/home/homeSlice";
+import { Router } from '../../navigators/router';
+import { fetchAddToCart } from "@screens/cart/cartSlice";
 
 const ProductDetail = () => {
-    const route = useRoute();
-    const navigation = useNavigation();
-    const name = route.params.name;
-    const image = route.params.image;
-    const description = route.params.description;
-    const price = route.params.price;
-    const selling_price = route.params.selling_price;
-
-    const rating = 4.8;
     const [quantity, setQuantity] = useState(1);
     const [textShown, setTextShown] = useState(false); //To show ur remaining Text
     const [lengthMore, setLengthMore] = useState(false); //to show the "Read more & Less Line
+    const [productDetail, setProductDetail] = useState({});
+
+    const route = useRoute();
+    const navigation = useNavigation();
+    const dispatch = useDispatch();
+
+    const isLogin = useSelector(state => state.auth.isLogin);
+
 
     const toggleNumberOfLines = () => { //To toggle the show text or hide it
         setTextShown(!textShown);
     }
     const onTextLayout = useCallback(e => {
         setLengthMore(e.nativeEvent.lines.length >= 4); //to check the text is more than 4 lines or not
-        // console.log(e.nativeEvent);
     }, []);
+
+    const getProductDetail = async () => {
+        let productId = route.params?.id
+
+        const { payload } = await dispatch(fetchgetProductDetail({
+            id: productId,
+        }));
+        if (payload.results) {
+            let data = payload.results;
+            setProductDetail(data)
+        }
+    };
+    const addToCart = async () => {
+        if (isLogin == true) {
+            let obj = {
+                "product_id": productDetail.product_id,
+                "product_quantity": 1,
+            }
+            const { payload } = await dispatch(fetchAddToCart(obj))
+            console.log(payload)
+        } else {
+            navigation.navigate(Router.Login)
+        }
+    }
+    useEffect(() => {
+        getProductDetail()
+    }, [])
 
     return (
         <SafeAreaView style={styles.container}>
@@ -52,21 +81,21 @@ const ProductDetail = () => {
                             </TouchableOpacity>
                         </View>
                     </View>
-                    <Image source={image} style={styles.image} />
+                    <Image source={{ uri: process.env.APP_URL + productDetail.product_media }} style={styles.image} />
                 </View>
                 <View style={styles.productContainer}>
 
                     {/* Tên và giá sản phẩm */}
                     <View style={{ borderBottomColor: Theme.COLORS.grey, borderBottomWidth: 1, paddingVertical: 12 }}>
-                        <CustomText style={styles.name} >{name}</CustomText>
+                        <CustomText style={styles.name} >{productDetail.product_label}</CustomText>
                         <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                             <View style={{ flexDirection: 'row' }}>
-                                <CustomText bold>{selling_price}  </CustomText>
-                                <CustomText style={selling_price ? { textDecorationLine: 'line-through' } : null}>{price}</CustomText>
+                                <CustomText bold>{productDetail.product_price}  </CustomText>
+                                {/* <CustomText style={selling_price ? { textDecorationLine: 'line-through' } : null}>{price}</CustomText> */}
                             </View>
                             <View style={styles.rate}>
                                 <Ionicons name="star" size={16} color={'#ffbf00'} />
-                                <CustomText bold color={'#ffbf00'}>{" "}{ }{rating}</CustomText>
+                                <CustomText bold color={'#ffbf00'}>{" "}{ }{productDetail.product_evaluate}</CustomText>
                             </View>
                         </View>
                     </View>
@@ -78,7 +107,7 @@ const ProductDetail = () => {
                             <CustomText
                                 onTextLayout={onTextLayout}
                                 numberOfLines={textShown ? undefined : 3}
-                                style={{ lineHeight: 21 }}>{description}</CustomText>
+                                style={{ lineHeight: 21 }}>{productDetail.product_description}</CustomText>
 
                             {
                                 lengthMore
@@ -114,7 +143,7 @@ const ProductDetail = () => {
                                     )
                                 }
                                 )}
-                                <CustomText color={Theme.COLORS.danger}>{" "}{rating}/5</CustomText>
+                                <CustomText color={Theme.COLORS.danger}>{" "}{productDetail.product_evaluate}/5</CustomText>
                             </View>
                             <TouchableOpacity style={{ flexDirection: 'row', }}>
                                 <CustomText>Xem tất cả</CustomText>
@@ -154,12 +183,12 @@ const ProductDetail = () => {
                         </TouchableOpacity>
                     </View>
                 </View>
-                <TouchableOpacity style={styles.addToCartContainer}>
+                <TouchableOpacity onPress={addToCart} activeOpacity={.5} style={styles.addToCartContainer}>
                     <CustomText style={styles.addToBasket}>Thêm vào giỏ</CustomText>
                     <View style={{ width: 1, backgroundColor: '#fff', height: '100%', marginHorizontal: 12 }}>
                     </View>
                     <View style={styles.priceContainer}>
-                        <CustomText style={styles.price}>$ {(selling_price ? selling_price : price) * quantity}</CustomText>
+                        {/* <CustomText style={styles.price}>$ {(selling_price ? selling_price : price) * quantity}</CustomText> */}
                     </View>
                 </TouchableOpacity>
             </View>

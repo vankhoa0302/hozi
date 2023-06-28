@@ -12,6 +12,7 @@ import {
 } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import CustomText from '@components/CustomText/CustomText';
+import { SIZES } from '@common/theme';
 const CustomButton = ({
   style,
   onPress,
@@ -43,6 +44,7 @@ const CustomButton = ({
       {label
         &&
         <CustomText
+          fontSize={SIZES.h4}
           style={{
             lineHeight: 24,
             color: labelColor,

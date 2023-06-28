@@ -2,20 +2,30 @@
 /* eslint-disable react-native/no-inline-styles */
 /* eslint-disable prettier/prettier */
 import { FlatList, Image, SafeAreaView, ScrollView, TouchableOpacity, View } from 'react-native';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { styles } from './styles';
 import CustomText from '@components/CustomText/CustomText';
-import CustomButton from '@components/CustomButton/CustomButton';
 import { Theme } from '@common/theme';
 import { useNavigation } from '@react-navigation/native';
 import Background from '@components/Background';
 import Ionicons from 'react-native-vector-icons/Ionicons'
-import ProductCard from './ProductCard';
-import { CATEGORIES, PRODUCTS } from '../../data/data';
+import { Router } from '../../navigators/router';
+import { useDispatch } from 'react-redux';
+import { fetchgetProductByType, fetchgetProductType } from './homeSlice';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+// console.log(process.env.APP_URL)
 
 const HomeScreen = () => {
-  const [categoryId, setCategoryId] = useState('1');
+  const [categoryId, setCategoryId] = useState('table');
   const navigation = useNavigation();
+  const [listProduct, setListProduct] = useState([]);
+  const [prodType, setProdType] = useState([]);
+
+
+  const dispatch = useDispatch();
+
+
   const handleSearch = () => {
     navigation.navigate('SearchScreen');
   };
@@ -24,7 +34,31 @@ const HomeScreen = () => {
   };
   const onPressCart = () => {
     navigation.navigate('CartScreen');
+  };
+
+  const getProductType = async () => {
+    const { payload } = await dispatch(fetchgetProductType())
+    if (payload.results) {
+      setProdType(payload.results)
+    }
   }
+
+  const getProductByType = async (typeid) => {
+    // await AsyncStorage.clear()
+    const { payload } = await dispatch(fetchgetProductByType({
+      type: typeid
+    }));
+    if (payload.results) {
+      let data = payload?.results
+      setListProduct(data);
+    }
+  }
+  useEffect(() => {
+    getProductType();
+  }, []);
+  useEffect(() => {
+    getProductByType(categoryId);
+  }, [categoryId])
 
   return (
     <Background>
@@ -45,19 +79,18 @@ const HomeScreen = () => {
         >
           <View style={styles.row}>
             <Ionicons name={'search-outline'} size={24} color={'black'} />
-            <CustomText color={Theme.COLORS.sub}>{"  "}Chair, desk, lamp, etc</CustomText>
+            <CustomText color={Theme.COLORS.sub}>{"  "}Tìm kiếm sản phẩm</CustomText>
           </View>
-          <TouchableOpacity style={styles.filter}>
+          {/* <TouchableOpacity style={styles.filter}>
             <Ionicons name={'options-outline'} size={24} color={Theme.COLORS.color2} />
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </TouchableOpacity>
 
 
       </View>
       <View style={styles.categoriesTab}>
-        <CustomText bold fontSize={20}>Thể loại</CustomText>
         <FlatList
-          data={CATEGORIES}
+          data={prodType}
           horizontal
           showsHorizontalScrollIndicator={false}
           key={({ item }) => item.id}
@@ -70,7 +103,7 @@ const HomeScreen = () => {
               }]}>
                 <CustomText style={[styles.subtitle, {
                   color: item.id === categoryId ? Theme.COLORS.white : Theme.COLORS.color1,
-                }]}>{item.title}</CustomText>
+                }]}>{item.typeName}</CustomText>
               </View>
             </TouchableOpacity>
           )}
@@ -78,28 +111,23 @@ const HomeScreen = () => {
       </View>
       <View style={styles.productContainer}>
         <FlatList
-          data={PRODUCTS}
+          data={listProduct}
           numColumns={2}
           showsVerticalScrollIndicator={false}
-          key={({ item }) => item.id}
+          key={({ item }) => item.product_id}
           renderItem={({ item }) => (
             <TouchableOpacity onPress={() => {
-              navigation.navigate('ProductDetail', {
-                id: item.id,
-                name: item.name,
-                image: item.image,
-                price: item.price,
-                description: item.discription,
-                selling_price: item.selling_price,
+              navigation.navigate(Router.ProductDetailScreen, {
+                id: item.product_id,
               })
             }}>
               <View style={styles.product}>
                 <TouchableOpacity onPress={() => { }} style={styles.add}>
                   <Ionicons name="add-outline" size={15} color={Theme.COLORS.white} />
                 </TouchableOpacity>
-                <Image source={item.image} style={styles.image} />
-                <CustomText style={styles.subtitle}>{item.name}</CustomText>
-                <CustomText style={styles.price}>$ {item.price}</CustomText>
+                <Image source={{ uri: process.env.APP_URL + item.product_media[0] }} style={styles.image} />
+                <CustomText numberOfLines={1} style={styles.subtitle}>{item.product_label}</CustomText>
+                <CustomText style={styles.price}>$ {item.product_price}</CustomText>
               </View>
             </TouchableOpacity>
           )}

@@ -1,7 +1,7 @@
 /* eslint-disable react/self-closing-comp */
 /* eslint-disable prettier/prettier */
 import { FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Background from '@components/Background';
 import CustomHeader from '@components/CustomHeader.js';
 import { styles } from './styles';
@@ -9,6 +9,11 @@ import CustomText from '@components/CustomText/CustomText';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { Theme } from '@common/theme';
 import { useNavigation } from '@react-navigation/native';
+import CustomButton from '@components/CustomButton/CustomButton';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchLogout, logout } from '@screens/auth/authSlice';
+import { fetchGetUserInfo } from './profileSilce';
 
 
 const data = [
@@ -19,7 +24,12 @@ const data = [
 ]
 const ProfileScreen = () => {
 
+
+
+  const userName = useSelector((state) => state.profile.userInfo.userName);
+
   const navigation = useNavigation();
+  const dispatch = useDispatch();
   const handlePress = (type) => {
     switch (type) {
       case 1:
@@ -39,10 +49,27 @@ const ProfileScreen = () => {
         break;
     }
   }
+  const _onLogoutPressed = async () => {
+    // AsyncStorage.clear();
+
+    const payload = await dispatch(fetchLogout());
+    console.log(payload)
+    // if (typeof (payload) !== 'undefined') {
+    //   dispatch(logout(false));
+    // }
+  };
+
+  const getUserInfo = async () => {
+    await dispatch(fetchGetUserInfo());
+  }
+
+  useEffect(() => {
+    getUserInfo();
+  }, [])
   return (
     <Background>
       <CustomHeader headerName={'My Profile'} />
-      <View style={{ marginHorizontal: 15 }}>
+      <View style={{ marginHorizontal: 15, flex: 1 }}>
         <FlatList
           showsVerticalScrollIndicator={false}
           data={data}
@@ -70,7 +97,7 @@ const ProfileScreen = () => {
                     </TouchableOpacity>
                   </View>
                   <View style={styles.infoArea}>
-                    <CustomText bold fontSize={18} >Van Khoa</CustomText>
+                    <CustomText bold fontSize={18} >{userName}</CustomText>
                     <CustomText>abc@gmail.com</CustomText>
                   </View>
                 </View>
@@ -88,7 +115,13 @@ const ProfileScreen = () => {
                   </View>
                   <Ionicons name='chevron-forward-outline' size={28} />
                 </TouchableOpacity>
-                <View style={{ height: 150, backgroundColor: 'transparent' }}>
+                <CustomButton
+                  onPress={_onLogoutPressed}
+                  label={'Đăng xuất'}
+                  color={Theme.COLORS.lightGrey}
+
+                />
+                <View style={{ height: 90, backgroundColor: 'transparent' }}>
                 </View>
               </View>
             )

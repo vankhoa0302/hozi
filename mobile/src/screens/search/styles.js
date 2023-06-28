@@ -5,18 +5,17 @@ import { StyleSheet } from "react-native";
 
 export const styles = StyleSheet.create({
     header: {
-        flexDirection: 'row',
-        alignItems: 'center',
+        paddingTop: 5,
+        paddingHorizontal: 15,
     },
     search: {
-        flex: 1,
         alignItems: 'center',
         flexDirection: 'row',
         borderRadius: 8,
-        paddingVertical: 4,
         paddingLeft: 12,
-        borderColor: '#DEDEDE',
-        borderWidth: 1,
+        backgroundColor: Theme.COLORS.lightGrey,
+        justifyContent: 'space-between',
+        marginTop: 8,
     },
     btnSearch: {
         width: 44,
@@ -27,5 +26,24 @@ export const styles = StyleSheet.create({
         borderBottomRightRadius: 8,
         backgroundColor: Theme.COLORS.sub,
         padding: 6,
-    }
+    },
+    product: {
+        margin: 5,
+        padding: 10,
+        backgroundColor: Theme.COLORS.bg,
+        borderRadius: 15,
+        width: WidthScreen / 2 - 25,
+        alignItems: 'center',
+        flexBasis: '46%',
+    },
+    productContainer: {
+        paddingVertical: 5,
+        paddingBottom: Platform.OS === "ios" ? 50 : 70,
+
+    },
+    image: {
+        width: WidthScreen / 3,
+        height: 150,
+        resizeMode: 'contain',
+    },
 });
