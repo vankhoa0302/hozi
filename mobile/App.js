@@ -10,16 +10,19 @@ import { Theme } from '@common/theme';
 import { Provider } from 'react-redux';
 import store from './src/redux/store';
 import AppNavigator from '@navigators';
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   StatusBar,
   View,
 } from 'react-native';
 import ShippingAddressScreen from '@screens/shipping address';
 import CheckoutScreen from '@screens/checkout';
+import SplashScreen from 'react-native-splash-screen';
 
 const App = () => {
-
+  useEffect(() => {
+    SplashScreen.hide();
+  }, [])
   return (
     <Provider store={store}>
       <View style={{ flex: 1 }}>
