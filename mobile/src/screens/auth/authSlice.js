@@ -1,6 +1,7 @@
 /* eslint-disable prettier/prettier */
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axiosService from '@modules/axiosService'
+import AsyncStorage from '@react-native-async-storage/async-storage';
 //fetch login
 const Login = (options) => {
     let url = `/oauth/token`;
@@ -51,12 +52,14 @@ export const authSlice = createSlice({
     },
     reducers: {
         isAuth: (state, action) => {
-            state.token = action.payload;
+            state.isLogin = action.payload;
         },
     },
     extraReducers: {
         [fetchLogin.fulfilled]: (state, { payload }) => {
-            state.isLogin = true;
+            let token = payload.token_type + " " + payload.access_token;
+            AsyncStorage.setItem('token', token);
+            AsyncStorage.setItem('refresh_token', payload.refresh_token);
         },
         [fetchLogout.fulfilled]: (state, { payload }) => {
             state.isLogin = false;

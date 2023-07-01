@@ -4,7 +4,6 @@
 /* eslint-disable no-dupe-keys */
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage'
-console.log(process.env.API_URL)
 const axiosService = axios.create({
     baseURL: process.env.API_URL,
     headers: {

@@ -15,7 +15,6 @@ export const fetchgetProductType = createAsyncThunk(
         return res;
     }
 );
-
 //fetch product by type
 const getProductByType = (options) => {
     let url = `/products`;

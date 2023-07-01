@@ -44,14 +44,13 @@ const HomeScreen = () => {
   }
 
   const getProductByType = async (typeid) => {
-    // await AsyncStorage.clear()
     const { payload } = await dispatch(fetchgetProductByType({
       type: typeid
     }));
     if (payload.results) {
       let data = payload?.results
       setListProduct(data);
-    }
+    };
   }
   useEffect(() => {
     getProductType();

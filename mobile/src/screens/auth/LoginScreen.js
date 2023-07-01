@@ -11,7 +11,7 @@ import { styles } from './styles'
 import { useDispatch, useSelector } from 'react-redux'
 import Background from '@components/Background/index'
 import CustomHeader from '@components/CustomHeader.js'
-import { fetchLogin } from './authSlice'
+import { fetchLogin, isAuth } from './authSlice'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useNavigation } from '@react-navigation/native'
 import { Router } from '../../navigators/router'
@@ -38,9 +38,7 @@ const LoginScreen = () => {
     formData.append('password', password);
     let { payload } = await dispatch(fetchLogin(formData));
     if (payload) {
-      let token = payload.token_type + " " + payload.access_token;
-      AsyncStorage.setItem('token', token);
-      AsyncStorage.setItem('refresh_token', payload.refresh_token);
+      dispatch(isAuth(true))
     }
   }
   return (

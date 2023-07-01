@@ -64,7 +64,7 @@ const ProfileScreen = () => {
   }
 
   useEffect(() => {
-    getUserInfo();
+    // getUserInfo();
   }, [])
   return (
     <Background>

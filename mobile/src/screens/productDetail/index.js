@@ -24,7 +24,6 @@ const ProductDetail = () => {
 
     const isLogin = useSelector(state => state.auth.isLogin);
 
-
     const toggleNumberOfLines = () => { //To toggle the show text or hide it
         setTextShown(!textShown);
     }
@@ -47,18 +46,19 @@ const ProductDetail = () => {
         if (isLogin == true) {
             let obj = {
                 "product_id": productDetail.product_id,
-                "product_quantity": 1,
+                "product_quantity": quantity,
             }
             const { payload } = await dispatch(fetchAddToCart(obj))
-            console.log(payload)
+            console.log(await dispatch(fetchAddToCart(obj)))
+            // console.log(payload)
         } else {
             navigation.navigate(Router.Login)
         }
     }
     useEffect(() => {
+        // console.log('first')
         getProductDetail()
     }, [])
-
     return (
         <SafeAreaView style={styles.container}>
             <ScrollView
