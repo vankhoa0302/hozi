@@ -26,16 +26,33 @@ export const fetchgetCartItem = createAsyncThunk(
         return res;
     }
 );
+
+//delete cart
+const deleteCart = (options) => {
+    let url = `api/cart`;
+    return axiosService.delete(url, options);
+};
+export const fetchDeleteCart = createAsyncThunk(
+    'auth/fechAddToCart',
+    async (options) => {
+        let res = await deleteCart(options);
+        return res;
+    }
+);
 export const cartSlice = createSlice({
     name: 'cart',
     initialState: {
-
+        // carts:[]
     },
     reducers: {
         
     },
     extraReducers: {
-
+        // [fetchAddToCart.fulfilled]: (state, { payload }) => {
+        //     let data = payload.results;
+        //     console.log(data)
+        //     state.cart = data;
+        // },
     }
 })
 const { actions, reducer } = cartSlice;

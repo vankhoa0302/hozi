@@ -11,14 +11,18 @@ import { PRODUCTS } from '../../data/data';
 import { useNavigation } from '@react-navigation/native';
 import { styles } from './styles';
 import { Router } from '../../navigators/router';
-import { useDispatch } from 'react-redux';
-import { fetchAddToCart, fetchgetCartItem } from './cartSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchAddToCart, fetchDeleteCart, fetchgetCartItem } from './cartSlice';
 const CartScreen = () => {
     const [totalAmount, setTotalAmount] = useState(1);
     const [cartItems, setCartItems] = useState([]);
 
+
+
     const navigation = useNavigation();
     const dispatch = useDispatch();
+
+
     const handleTrashPress = () => {
         Alert.alert('Xóa giỏ hàng!', 'Xóa toàn bộ sản phẩm trong giỏ', [
             {
@@ -26,27 +30,54 @@ const CartScreen = () => {
                 onPress: () => console.log('Cancel Pressed'),
                 style: 'destructive',
             },
-            { text: 'Xóa', onPress: () => console.log('OK Pressed') },
+            { text: 'Xóa', onPress: () => deleteCart() },
         ])
     };
 
-    const onMinus = (item) => {
-        if (item?.quantity < 1) {
-            return;
-        } else {
-            let obj={
-                product_id:item.product_id,
-                product_quantity :-1
+    const onAdd = (id) => {
+        const updatedCartItems = cartItems.map((item) => {
+            if (item.product_id === id) {
+                const newQuantity = parseInt(item.cart_quantity) + 1;
+                let obj={
+                    product_id:id,
+                    product_quantity :1
+                }
+                dispatch(fetchAddToCart(obj));
+              return { ...item, cart_quantity: newQuantity };
             }
-            dispatch(fetchAddToCart(obj));
-        }
+            return item;
+          });
+          setCartItems(updatedCartItems);
     };
-    const onAdd = (item) => {
-        console.log(item.product_id)
+
+    const onMinus = (id) => {
+        const updatedCartItems = cartItems.map((item) => {
+            if (item.product_id === id && item.cart_quantity > 1) {
+                let obj={
+                    product_id:id,
+                    product_quantity :-1
+                }
+                dispatch(fetchAddToCart(obj));
+                return { ...item, cart_quantity: item.cart_quantity - 1 };
+            }
+            return item;
+          });     
+          setCartItems(updatedCartItems);
     };
+    
+
+
     const handleDeleteItem = (id) => {
         console.log(id)
     }
+
+    const deleteCart = async () => {
+        let {payload} = await dispatch(fetchDeleteCart())
+        if(payload){
+            setCartItems([])
+        }
+    }
+
     const handleOnPress = (id) => {
         navigation.navigate(Router.ProductDetailScreen, { id: id })
     }
@@ -56,8 +87,8 @@ const CartScreen = () => {
                 handleOnPress={() => handleOnPress(item.product_id)}
                 item={item}
                 deleteItem={() => { handleDeleteItem(item.id) }}
-                onAdd={() => onAdd(item)}
-                onMinus={() => onMinus(item)}
+                onAdd={() => onAdd(item.product_id)}
+                onMinus={() => onMinus(item.product_id)}
             />
         )
     };
@@ -72,9 +103,11 @@ const CartScreen = () => {
             setCartItems(data);
         }
     }
-    useEffect(() => {
+
+    useEffect(()=>{
         getCartItem();
-    }, [])
+    },[])
+    
     return (
         <Background>
             <CustomHeader headerName={'My Cart'} isBack={true} rightIcon={'trash-outline'} onRightPress={handleTrashPress} />
@@ -83,7 +116,7 @@ const CartScreen = () => {
                     data={cartItems}
                     showsVerticalScrollIndicator={false}
                     renderItem={_renderItem}
-                    keyExtractor={item => item.id}
+                    keyExtractor={item => item.product_id}
                 />
             </View>
             <CustomButton

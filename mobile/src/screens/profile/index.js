@@ -12,7 +12,7 @@ import { useNavigation } from '@react-navigation/native';
 import CustomButton from '@components/CustomButton/CustomButton';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchLogout, logout } from '@screens/auth/authSlice';
+import { fetchLogout, isAuth, logout } from '@screens/auth/authSlice';
 import { fetchGetUserInfo } from './profileSilce';
 
 
@@ -50,13 +50,11 @@ const ProfileScreen = () => {
     }
   }
   const _onLogoutPressed = async () => {
-    // AsyncStorage.clear();
-
+    AsyncStorage.clear();
     const payload = await dispatch(fetchLogout());
-    console.log(payload)
-    // if (typeof (payload) !== 'undefined') {
-    //   dispatch(logout(false));
-    // }
+    if(payload){
+      dispatch(isAuth(false));
+    }
   };
 
   const getUserInfo = async () => {

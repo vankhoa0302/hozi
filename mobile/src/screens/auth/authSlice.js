@@ -61,9 +61,6 @@ export const authSlice = createSlice({
             AsyncStorage.setItem('token', token);
             AsyncStorage.setItem('refresh_token', payload.refresh_token);
         },
-        [fetchLogout.fulfilled]: (state, { payload }) => {
-            state.isLogin = false;
-        },
     }
 })
 const { actions, reducer } = authSlice;
