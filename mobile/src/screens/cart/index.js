@@ -11,12 +11,14 @@ import { PRODUCTS } from '../../data/data';
 import { useNavigation } from '@react-navigation/native';
 import { styles } from './styles';
 import { Router } from '../../navigators/router';
+import { useDispatch } from 'react-redux';
+import { fetchAddToCart, fetchgetCartItem } from './cartSlice';
 const CartScreen = () => {
     const [totalAmount, setTotalAmount] = useState(1);
     const [cartItems, setCartItems] = useState([]);
 
     const navigation = useNavigation();
-
+    const dispatch = useDispatch();
     const handleTrashPress = () => {
         Alert.alert('Xóa giỏ hàng!', 'Xóa toàn bộ sản phẩm trong giỏ', [
             {
@@ -32,25 +34,15 @@ const CartScreen = () => {
         if (item?.quantity < 1) {
             return;
         } else {
-            const newCartItems = cartItems.map((cartItem) => {
-                if (cartItem.id === item.id) {
-                    return { ...cartItem, quantity: cartItem.quantity - 1 };
-                } else {
-                    return cartItem;
-                }
-            });
-            setCartItems(newCartItems);
+            let obj={
+                product_id:item.product_id,
+                product_quantity :-1
+            }
+            dispatch(fetchAddToCart(obj));
         }
     };
     const onAdd = (item) => {
-        const newCartItems = cartItems.map((cartItem) => {
-            if (cartItem.id === item.id) {
-                return { ...cartItem, quantity: cartItem.quantity + 1 };
-            } else {
-                return cartItem;
-            }
-        });
-        setCartItems(newCartItems);
+        console.log(item.product_id)
     };
     const handleDeleteItem = (id) => {
         console.log(id)
@@ -58,10 +50,10 @@ const CartScreen = () => {
     const handleOnPress = (id) => {
         navigation.navigate(Router.ProductDetailScreen, { id: id })
     }
-    const _renderItem = ({ item }) => {
+    const  _renderItem = ({ item }) => {
         return (
             <CartItem
-                handleOnPress={() => handleOnPress(item.id)}
+                handleOnPress={() => handleOnPress(item.product_id)}
                 item={item}
                 deleteItem={() => { handleDeleteItem(item.id) }}
                 onAdd={() => onAdd(item)}
@@ -69,8 +61,19 @@ const CartScreen = () => {
             />
         )
     };
+
+    const getCartItem = async () =>{
+        let obj={
+            page:0
+        }
+        const{payload} = await dispatch(fetchgetCartItem(obj))
+        if(payload?.results){
+            let data = payload?.results
+            setCartItems(data);
+        }
+    }
     useEffect(() => {
-        setCartItems(PRODUCTS);
+        getCartItem();
     }, [])
     return (
         <Background>

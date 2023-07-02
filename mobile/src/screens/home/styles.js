@@ -102,4 +102,18 @@ export const styles = StyleSheet.create({
     price: {
         fontWeight: FONTWEIGHT.bold
     },
+    numberCart:{
+        position:'absolute',
+        right:-8,
+        top:-6,
+        backgroundColor:'red',
+        width:22,
+        borderRadius:12,
+        textAlign:'center',
+        fontSize:11,
+        color:'#fff',
+        borderWidth:1,
+        borderColor:'#fff',
+        paddingTop:2,
+    }
 });

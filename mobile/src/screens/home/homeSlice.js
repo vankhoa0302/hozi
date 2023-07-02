@@ -5,7 +5,7 @@ import axiosService from '@modules/axiosService'
 
 //fetch product type
 const getProductType = (options) => {
-    let url = `/paragraph/furniture_category`;
+    let url = `/api/paragraph/furniture_category`;
     return axiosService.get(url, options);
 };
 export const fetchgetProductType = createAsyncThunk(
@@ -17,7 +17,7 @@ export const fetchgetProductType = createAsyncThunk(
 );
 //fetch product by type
 const getProductByType = (options) => {
-    let url = `/products`;
+    let url = `/api/products`;
     return axiosService.get(url, { params: options });
 };
 export const fetchgetProductByType = createAsyncThunk(
@@ -29,7 +29,7 @@ export const fetchgetProductByType = createAsyncThunk(
 );
 //fetch product detail
 const getProductDetail = (options) => {
-    let url = `/product/${options.id}`;
+    let url = `/api/product/${options.id}`;
     return axiosService.get(url, options);
 };
 export const fetchgetProductDetail = createAsyncThunk(
@@ -41,7 +41,7 @@ export const fetchgetProductDetail = createAsyncThunk(
 );
 //search product
 const seachProduct = (options) => {
-    let url = `/products?label=${options.label}`;
+    let url = `/api/products?label=${options.label}`;
     return axiosService.get(url, options);
 };
 export const fetchSearchProduct = createAsyncThunk(

@@ -5,11 +5,13 @@
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage'
 const axiosService = axios.create({
+    
     baseURL: process.env.API_URL,
     headers: {
         'Content-Type': 'application/json',
     },
 });
+console.log(process.env.API_URL)
 
 axiosService.interceptors.request.use(
     async (config) => {

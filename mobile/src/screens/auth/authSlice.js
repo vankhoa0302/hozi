@@ -4,7 +4,7 @@ import axiosService from '@modules/axiosService'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 //fetch login
 const Login = (options) => {
-    let url = `/oauth/token`;
+    let url = `/api/oauth/token`;
     return axiosService.post(url, options, {
         headers: {
             'Content-Type': 'multipart/form-data',
@@ -20,7 +20,7 @@ export const fetchLogin = createAsyncThunk(
 );
 //fetch logout user
 const logoutUser = (options) => {
-    let url = `/user/logout`;
+    let url = `/api/user/logout`;
     return axiosService.get(url, options);
 };
 export const fetchLogout = createAsyncThunk(
@@ -32,7 +32,7 @@ export const fetchLogout = createAsyncThunk(
 );
 //fetch register
 const register = (options) => {
-    let url = `/user-register`;
+    let url = `/api/user-register`;
     return axiosService.post(url, options);
 };
 export const fetchRegister = createAsyncThunk(

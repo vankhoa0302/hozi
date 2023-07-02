@@ -68,6 +68,7 @@ const HomeScreen = () => {
             onPress={onPressCart}
           >
             <Ionicons name="cart" size={30} color={Theme.COLORS.color2} />
+            <CustomText style={styles.numberCart}>1</CustomText>
           </TouchableOpacity>
         </View>
         <CustomText style={styles.titleBold}>Hozi</CustomText>

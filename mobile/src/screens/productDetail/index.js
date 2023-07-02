@@ -49,14 +49,14 @@ const ProductDetail = () => {
                 "product_quantity": quantity,
             }
             const { payload } = await dispatch(fetchAddToCart(obj))
-            console.log(await dispatch(fetchAddToCart(obj)))
-            // console.log(payload)
+            if(payload?.results){
+                console.log(payload)
+            }
         } else {
             navigation.navigate(Router.Login)
         }
     }
     useEffect(() => {
-        // console.log('first')
         getProductDetail()
     }, [])
     return (
