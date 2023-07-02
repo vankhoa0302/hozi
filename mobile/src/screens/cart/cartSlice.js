@@ -42,19 +42,22 @@ export const fetchDeleteCart = createAsyncThunk(
 export const cartSlice = createSlice({
     name: 'cart',
     initialState: {
-        // carts:[]
+        numberCart: 0,
     },
     reducers: {
-        
+
     },
     extraReducers: {
-        // [fetchAddToCart.fulfilled]: (state, { payload }) => {
-        //     let data = payload.results;
-        //     console.log(data)
-        //     state.cart = data;
-        // },
+        [fetchAddToCart.fulfilled]: (state, { payload }) => {
+            // let count = payload.results.cart_count_item;
+            // state.numberCart = count;
+        },
+        [fetchDeleteCart.fulfilled]: (state, { payload }) => {
+            state.numberCart = 0
+        },
     }
+
 })
 const { actions, reducer } = cartSlice;
-export const {} = actions;
+export const { } = actions;
 export default reducer; 

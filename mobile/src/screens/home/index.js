@@ -10,7 +10,7 @@ import { useNavigation } from '@react-navigation/native';
 import Background from '@components/Background';
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import { Router } from '../../navigators/router';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { fetchgetProductByType, fetchgetProductType } from './homeSlice';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -24,7 +24,7 @@ const HomeScreen = () => {
 
 
   const dispatch = useDispatch();
-
+  const numberCart = useSelector((state) => state.cart.numberCart)
 
   const handleSearch = () => {
     navigation.navigate('SearchScreen');
@@ -39,6 +39,7 @@ const HomeScreen = () => {
   const getProductType = async () => {
     const { payload } = await dispatch(fetchgetProductType())
     if (payload.results) {
+      console.log(payload)
       setProdType(payload.results)
     }
   }
@@ -48,6 +49,7 @@ const HomeScreen = () => {
       type: typeid
     }));
     if (payload.results) {
+      console.log(payload)
       let data = payload?.results
       setListProduct(data);
     };
@@ -68,7 +70,11 @@ const HomeScreen = () => {
             onPress={onPressCart}
           >
             <Ionicons name="cart" size={30} color={Theme.COLORS.color2} />
-            <CustomText style={styles.numberCart}>1</CustomText>
+            {numberCart > 0
+              ?
+              <CustomText style={styles.numberCart}>{numberCart}</CustomText>
+              : null
+            }
           </TouchableOpacity>
         </View>
         <CustomText style={styles.titleBold}>Hozi</CustomText>
