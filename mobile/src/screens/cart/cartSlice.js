@@ -33,9 +33,22 @@ const deleteCart = (options) => {
     return axiosService.delete(url, options);
 };
 export const fetchDeleteCart = createAsyncThunk(
-    'auth/fechAddToCart',
+    'auth/fetchDeleteCart',
     async (options) => {
         let res = await deleteCart(options);
+        return res;
+    }
+);
+//delete cart
+const deleteCartItem = (options) => {
+    console.log(options)
+    let url = `api/cart`;
+    return axiosService.delete(url, options);
+};
+export const fetchdDeleteCartItem = createAsyncThunk(
+    'auth/fetchdDeleteCartItem',
+    async (options) => {
+        let res = await deleteCartItem(options);
         return res;
     }
 );
@@ -47,15 +60,16 @@ export const cartSlice = createSlice({
     reducers: {
 
     },
-    extraReducers: {
-        [fetchAddToCart.fulfilled]: (state, { payload }) => {
-            // let count = payload.results.cart_count_item;
-            // state.numberCart = count;
-        },
-        [fetchDeleteCart.fulfilled]: (state, { payload }) => {
-            state.numberCart = 0
-        },
-    }
+ 
+    extraReducers: (builder) => {       
+          builder.addCase(fetchAddToCart.fulfilled, (state, {payload}) => {
+                let count = payload.results.cart_count_item;
+                state.numberCart = count;
+          });
+          builder.addCase(fetchDeleteCart.fulfilled, (state, {payload}) => {
+                state.numberCart = 0
+      });
+      },
 
 })
 const { actions, reducer } = cartSlice;

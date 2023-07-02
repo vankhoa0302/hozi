@@ -12,7 +12,7 @@ import { useNavigation } from '@react-navigation/native';
 import { styles } from './styles';
 import { Router } from '../../navigators/router';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchAddToCart, fetchDeleteCart, fetchgetCartItem } from './cartSlice';
+import { fetchAddToCart, fetchDeleteCart, fetchdDeleteCartItem, fetchgetCartItem } from './cartSlice';
 const CartScreen = () => {
     const [totalAmount, setTotalAmount] = useState(1);
     const [cartItems, setCartItems] = useState([]);
@@ -67,8 +67,16 @@ const CartScreen = () => {
     
 
 
-    const handleDeleteItem = (id) => {
-        console.log(id)
+    const handleDeleteItem = async (id) => {
+        let obj = {
+            product_id:id
+        }
+        const {payload} = await dispatch(fetchdDeleteCartItem(obj))
+        console.log(await dispatch(fetchdDeleteCartItem(obj)))
+        // if(payload){
+        //     const updatedCartItems = cartItems.filter((item) => item.product_id !== id);
+        //     setCartItems(updatedCartItems);
+        // }
     }
 
     const deleteCart = async () => {
@@ -86,7 +94,7 @@ const CartScreen = () => {
             <CartItem
                 handleOnPress={() => handleOnPress(item.product_id)}
                 item={item}
-                deleteItem={() => { handleDeleteItem(item.id) }}
+                deleteItem={() => { handleDeleteItem(item.product_id) }}
                 onAdd={() => onAdd(item.product_id)}
                 onMinus={() => onMinus(item.product_id)}
             />

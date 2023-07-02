@@ -50,7 +50,7 @@ const ProductDetail = () => {
             }
             const { payload } = await dispatch(fetchAddToCart(obj))
             if(payload?.results){
-                console.log(payload)
+                // console.log(payload)
             }
         } else {
             navigation.navigate(Router.Login)

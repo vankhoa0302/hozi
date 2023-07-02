@@ -39,7 +39,6 @@ const HomeScreen = () => {
   const getProductType = async () => {
     const { payload } = await dispatch(fetchgetProductType())
     if (payload.results) {
-      console.log(payload)
       setProdType(payload.results)
     }
   }
@@ -49,7 +48,6 @@ const HomeScreen = () => {
       type: typeid
     }));
     if (payload.results) {
-      console.log(payload)
       let data = payload?.results
       setListProduct(data);
     };
