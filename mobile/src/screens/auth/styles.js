@@ -32,10 +32,10 @@ export const styles = StyleSheet.create({
     elevation: 5,
   },
   inputArea: {
+    marginHorizontal: 20,
     marginVertical: 8,
-    borderRadius: 4,
-    borderColor: Theme.COLORS.sub,
-    borderWidth: 1,
+    borderBottomWidth: 1,
+    borderBottomColor: Theme.COLORS.color2,
     padding: 6
   },
   textInput: {
@@ -47,5 +47,18 @@ export const styles = StyleSheet.create({
   },
   btnLoginRegister: {
     borderRadius: 38
-  }
+  },
+  checkoutContainer: {
+    flexDirection: 'row',
+    borderRadius: 38,
+    marginHorizontal: 15,
+    justifyContent: 'center',
+    marginBottom: 12,
+  },
+  error: {
+    color: Theme.COLORS.danger,
+    paddingTop: 4,
+    fontSize: 14,
+    marginLeft: 20
+  },
 })

@@ -2,11 +2,45 @@ import { SIZES, Theme, WidthScreen } from "@common/theme";
 import { StyleSheet } from "react-native";
 
 export const styles = StyleSheet.create({
-    address: {
+    // address: {
+    //     flexDirection: 'row',
+    //     margin: 8,
+    //     justifyContent: 'space-between',
+    //     paddingHorizontal: 15,
+    // },
+    modalContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    },
+    modalContent: {
+        backgroundColor: '#fff',
+        borderRadius: 8,
+        padding: 20,
+        width: '80%',
+        maxWidth: 300,
+    },
+    input: {
+        height: 40,
+        borderWidth: 1,
+        borderColor: '#ccc',
+        borderRadius: 4,
+        marginBottom: 10,
+        paddingHorizontal: 10,
+    },
+    buttonContainer: {
         flexDirection: 'row',
-        margin: 8,
-        justifyContent: 'space-between',
-        paddingHorizontal: 15,
+        justifyContent: 'center'
+    },
+    input: {
+        width: '100%',
+        height: 40,
+        borderWidth: 1,
+        borderColor: '#ccc',
+        borderRadius: 4,
+        marginBottom: 10,
+        paddingHorizontal: 10,
     },
     row: {
         flexDirection: 'row',
@@ -25,7 +59,6 @@ export const styles = StyleSheet.create({
         padding: 15
     },
     paymentContainer: {
-        flexDirection: 'row',
         borderRadius: 50,
         marginHorizontal: 15,
         justifyContent: 'center',
@@ -35,5 +68,26 @@ export const styles = StyleSheet.create({
         color: Theme.COLORS.white,
         fontSize: SIZES.h4,
 
+    },
+    checkoutSuccessBtn: {
+        backgroundColor: '#fff',
+        flexDirection: 'row',
+        borderRadius: 50,
+        marginHorizontal: 15,
+        justifyContent: 'center',
+        marginBottom: 12,
+        borderColor: Theme.COLORS.color2,
+        borderWidth: 1,
+    },
+    row3: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between'
+    },
+    loader: {
+        minHeight: '100%',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
     },
 })

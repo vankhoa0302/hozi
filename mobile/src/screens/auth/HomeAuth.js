@@ -8,11 +8,13 @@ import { Theme } from '@common/theme'
 import { styles } from './styles'
 import { useNavigation } from '@react-navigation/native'
 import { Router } from '../../navigators/router'
+import ToastManager, { Toast } from 'toastify-react-native'
 
 const HomeAuth = () => {
     const navigation = useNavigation();
     return (
         <Background>
+            <ToastManager />
             <CustomHeader headerName={'My Profile'} />
             <View style={{ flex: 1, justifyContent: 'center', marginHorizontal: 25 }}>
                 <CustomButton

@@ -4,6 +4,12 @@ import { SIZES, Theme } from "@common/theme";
 import { StyleSheet } from "react-native";
 
 export const styles = StyleSheet.create({
+    loader: {
+        minHeight: '100%',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
     itemChild: {
         justifyContent: 'flex-end',
         alignItems: 'flex-start'

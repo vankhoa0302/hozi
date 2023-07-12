@@ -26,9 +26,8 @@ const styles = StyleSheet.create({
     quantityContainer: {
         flexDirection: 'row',
         marginVertical: 12,
-        alignItems: 'center',
+        alignContent: 'flex-end',
         borderRadius: 5,
-        justifyContent: 'space-between'
     },
     quantity: {
         textAlign: 'center',
@@ -77,12 +76,14 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
-        paddingHorizontal: 15,
+        paddingHorizontal: 8,
+        paddingVertical: 4,
+
     },
     productContainer: {
         padding: 20,
-        borderTopLeftRadius: 30,
-        borderTopRightRadius: 30,
+        borderTopLeftRadius: 8,
+        borderTopRightRadius: 8,
         backgroundColor: Theme.COLORS.white
     },
     footer: {
@@ -102,6 +103,43 @@ const styles = StyleSheet.create({
         height: 20,
         borderRadius: 10,
         marginLeft: 8
+    },
+    price: {
+        textDecorationLine: 'line-through',
+        marginLeft: 8,
+        color: 'grey'
+    },
+    discount: {
+        alignItems: 'center',
+        backgroundColor: 'red',
+        borderRadius: 4,
+        paddingHorizontal: 8,
+        marginLeft: 12
+    },
+    search: {
+        flex: 1,
+        alignItems: 'center',
+        flexDirection: 'row',
+        borderRadius: 8,
+        paddingVertical: 8,
+        paddingLeft: 12,
+        backgroundColor: Theme.COLORS.lightGrey,
+        justifyContent: 'space-between',
+        marginHorizontal: 8,
+    },
+    numberCart: {
+        position: 'absolute',
+        right: -8,
+        top: -6,
+        backgroundColor: 'red',
+        width: 22,
+        borderRadius: 12,
+        textAlign: 'center',
+        fontSize: 11,
+        color: '#fff',
+        borderWidth: 1,
+        borderColor: '#fff',
+        paddingTop: 2,
     }
 });
 

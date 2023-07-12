@@ -4,9 +4,18 @@ import { HeightScreen, Theme, WidthScreen } from "@common/theme";
 import { StyleSheet } from "react-native";
 
 export const styles = StyleSheet.create({
+    loader: {
+        minHeight: '100%',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
     header: {
         paddingTop: 5,
         paddingHorizontal: 15,
+        paddingBottom: 12,
+        borderBottomWidth: 1,
+        borderBottomColor: Theme.COLORS.grey
     },
     search: {
         alignItems: 'center',
@@ -28,18 +37,13 @@ export const styles = StyleSheet.create({
         padding: 6,
     },
     product: {
-        margin: 5,
-        padding: 10,
-        backgroundColor: Theme.COLORS.bg,
-        borderRadius: 15,
-        width: WidthScreen / 2 - 25,
+        width: WidthScreen / 2 - 20,
         alignItems: 'center',
-        flexBasis: '46%',
     },
     productContainer: {
-        paddingVertical: 5,
+        paddingTop: 8,
+        alignItems: 'center',
         paddingBottom: Platform.OS === "ios" ? 50 : 70,
-
     },
     image: {
         width: WidthScreen / 3,

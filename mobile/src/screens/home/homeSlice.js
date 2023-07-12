@@ -41,13 +41,51 @@ export const fetchgetProductDetail = createAsyncThunk(
 );
 //search product
 const seachProduct = (options) => {
-    let url = `/api/products?label=${options.label}`;
-    return axiosService.get(url, options);
+    let url = `/api/products`;
+    return axiosService.get(url, { params: options });
 };
 export const fetchSearchProduct = createAsyncThunk(
     'product/fetchSearchProduct',
     async (options) => {
         let res = await seachProduct(options);
+        return res;
+    }
+);
+//add to wish list
+const addToWish = (options) => {
+    let url = `api/favorite`;
+    return axiosService.post(url, options);
+};
+export const fetchAddToWish = createAsyncThunk(
+    'product/fetchAddToWish',
+    async (options) => {
+        let res = await addToWish(options);
+        return res;
+    }
+);
+
+//add to wish list
+const getWishList = (options) => {
+    let url = `api/favorite`;
+    return axiosService.get(url, { parrams: options });
+};
+export const fetchGetWishList = createAsyncThunk(
+    'product/fetchGetWishList',
+    async (options) => {
+        let res = await getWishList(options);
+        return res;
+    }
+);
+
+//get slide
+const getSlide = (options) => {
+    let url = `api/slider`;
+    return axiosService.get(url, options);
+};
+export const fetchGetSlide = createAsyncThunk(
+    'product/fetchGetSlide',
+    async (options) => {
+        let res = await getSlide(options);
         return res;
     }
 );
@@ -57,17 +95,18 @@ export const homeSlice = createSlice({
         userInfo: {
             userName: '',
             email: '',
-        }
+        },
+        loading: false,
     },
     reducers: {
+        setLoading: (state, action) => {
+            state.loading = action.payload
+        }
     },
-    extraReducers: {
-        // [fetchGetUserInfo.fulfilled]: (state, { payload }) => {
-        //     let data = payload.results
-        //     state.userInfo.userName = data[0].user_name;
-        // },
-    }
+    extraReducers: (builder) => {
+
+    },
 })
 const { actions, reducer } = homeSlice;
-export const { } = actions;
+export const { setLoading } = actions;
 export default reducer; 

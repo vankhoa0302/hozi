@@ -44,7 +44,7 @@ const CustomButton = ({
       {label
         &&
         <CustomText
-          fontSize={SIZES.h4}
+          fontSize={labelSize ? labelSize : SIZES.h4}
           style={{
             lineHeight: 24,
             color: labelColor,

@@ -14,6 +14,12 @@ import CheckoutScreen from '@screens/checkout';
 import LoginScreen from '@screens/auth/LoginScreen';
 import RegisterScreen from '@screens/auth/RegisterScreen';
 import { Router } from './router';
+import CheckoutSuccess from '@screens/checkout/success';
+import ProductByCategory from '@screens/category/ProductByCategory';
+import CategoryScreen from '@screens/category';
+import OrderScreen from '@screens/checkout/order';
+import OrderDetail from '@screens/checkout/orderDetail';
+import ChangePassword from '@screens/profile/ChangePassword';
 
 function AppNavigator() {
   const Stack = createNativeStackNavigator();
@@ -27,13 +33,24 @@ function AppNavigator() {
         }}
       >
         <Stack.Screen name='BottomTab' component={BottomTab} />
-        <Stack.Screen name={Router.CartScreen} component={CartScreen} />
+        <Stack.Screen options={{ animation: 'slide_from_right' }} name={Router.CartScreen} component={CartScreen} />
         <Stack.Screen name={Router.SearchScreen} component={SearchScreen} />
         <Stack.Screen name={Router.ProductDetailScreen} component={ProductDetail} />
         <Stack.Screen name={Router.ShippingAddressScreen} component={ShippingAddressScreen} />
         <Stack.Screen name={Router.CheckOutScreen} component={CheckoutScreen} />
         <Stack.Screen name={Router.Login} component={LoginScreen} />
         <Stack.Screen name={Router.Register} component={RegisterScreen} />
+        <Stack.Screen name={Router.CheckoutSuccess} component={CheckoutSuccess} />
+        <Stack.Screen options={{ animation: 'slide_from_right' }} name={Router.ProductByCategory} component={ProductByCategory} />
+        <Stack.Screen options={{ animation: 'slide_from_right' }} name={Router.Explore} component={CategoryScreen} />
+        <Stack.Screen options={{ animation: 'slide_from_right' }} name={Router.OrderScreen} component={OrderScreen} />
+        <Stack.Screen options={{ animation: 'slide_from_right' }} name={Router.OrderDetail} component={OrderDetail} />
+        <Stack.Screen options={{ animation: 'slide_from_right' }} name={Router.ChangePassword} component={ChangePassword} />
+
+
+
+
+
       </Stack.Navigator>
     </NavigationContainer>
   );

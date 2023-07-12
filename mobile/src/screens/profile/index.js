@@ -14,7 +14,9 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchLogout, isAuth, logout } from '@screens/auth/authSlice';
 import { fetchGetUserInfo } from './profileSilce';
-
+import { setCart } from '@screens/cart/cartSlice';
+import { Router } from '../../navigators/router';
+import ToastManager from 'toastify-react-native'
 
 const data = [
   { id: 1, title: 'Đơn mua', sub: '10 đơn hàng' },
@@ -24,7 +26,7 @@ const data = [
 ]
 const ProfileScreen = () => {
 
-
+  const [userInfo, setUserInfo] = useState();
 
   const userName = useSelector((state) => state.profile.userInfo.userName);
 
@@ -33,98 +35,103 @@ const ProfileScreen = () => {
   const handlePress = (type) => {
     switch (type) {
       case 1:
-        navigation.navigate('MyOders')
+        navigation.navigate(Router.OrderScreen)
         break;
       case 2:
         navigation.navigate('ShippingAddresses')
         break;
-      case 3:
-        navigation.navigate('PaymentMethod')
-        break;
-      case 4:
-        navigation.navigate('MyReviews')
-        break;
-      case 5:
-        navigation.navigate('Setting')
-        break;
+      // case 3:
+      //   navigation.navigate('PaymentMethod')
+      //   break;
+      // case 4:
+      //   navigation.navigate('MyReviews')
+      //   break;
+      // case 5:
+      //   navigation.navigate('Setting')
+      //   break;
     }
   }
   const _onLogoutPressed = async () => {
+    // const payload = await dispatch(fetchLogout());
+    // if (payload) {
+    //   dispatch(setCart(0));
+    // }
     AsyncStorage.clear();
-    const payload = await dispatch(fetchLogout());
-    if(payload){
-      dispatch(isAuth(false));
-    }
+    await dispatch(isAuth(false))
+    await dispatch(setCart(0))
   };
 
   const getUserInfo = async () => {
-    await dispatch(fetchGetUserInfo());
+    const { payload } = await dispatch(fetchGetUserInfo());
+    if (payload?.results) {
+      setUserInfo(payload?.results);
+    }
+
   }
 
   useEffect(() => {
-    // getUserInfo();
+    getUserInfo();
   }, [])
   return (
     <Background>
+      <ToastManager />
       <CustomHeader headerName={'My Profile'} />
       <View style={{ marginHorizontal: 15, flex: 1 }}>
-        <FlatList
-          showsVerticalScrollIndicator={false}
-          data={data}
-          keyExtractor={(item) => item.id}
-          renderItem={({ item }) => {
-            return (
-              <TouchableOpacity style={styles.card} onPress={() => handlePress(item.id)}>
-                <View>
-                  <CustomText bold>{item.title}</CustomText>
-                  <CustomText>{item.sub}</CustomText>
-
-                </View>
-                <Ionicons name='chevron-forward-outline' size={28} />
+        <View>
+          <View style={styles.profileInfo}>
+            <View style={styles.avatarArea}>
+              <Image source={{ uri: 'https://th.bing.com/th/id/OIP.XpeGVH_r6WEnbaLYdqNCNQHaNK?pid=ImgDet&w=1440&h=2560&rs=1' }} style={styles.avatar} resizeMode='cover' />
+              <TouchableOpacity style={styles.camera} activeOpacity={.7}>
+                <Ionicons name='camera-outline' size={20} color={Theme.COLORS.black} />
               </TouchableOpacity>
-            )
-          }}
-          ListHeaderComponent={() => {
-            return (
-              <View>
-                <View style={styles.profileInfo}>
-                  <View style={styles.avatarArea}>
-                    <Image source={{ uri: 'https://th.bing.com/th/id/OIP.XpeGVH_r6WEnbaLYdqNCNQHaNK?pid=ImgDet&w=1440&h=2560&rs=1' }} style={styles.avatar} resizeMode='cover' />
-                    <TouchableOpacity style={styles.camera} activeOpacity={.7}>
-                      <Ionicons name='camera-outline' size={20} color={Theme.COLORS.black} />
-                    </TouchableOpacity>
-                  </View>
-                  <View style={styles.infoArea}>
-                    <CustomText bold fontSize={18} >{userName}</CustomText>
-                    <CustomText>abc@gmail.com</CustomText>
-                  </View>
-                </View>
-                <CustomText bold color={Theme.COLORS.sub}>Account</CustomText>
-              </View>
-            )
-          }}
-          ListFooterComponent={() => {
-            return (
-              <View>
-                <TouchableOpacity style={styles.card}>
-                  <View>
-                    <CustomText bold>Cài đặt</CustomText>
-                    <CustomText>Notification, Password, FAQ, Contact</CustomText>
-                  </View>
-                  <Ionicons name='chevron-forward-outline' size={28} />
-                </TouchableOpacity>
-                <CustomButton
-                  onPress={_onLogoutPressed}
-                  label={'Đăng xuất'}
-                  color={Theme.COLORS.lightGrey}
+            </View>
+            <View style={styles.infoArea}>
+              <CustomText bold fontSize={18} >{userInfo?.user_name}</CustomText>
+              {/* <CustomText>abc@gmail.com</CustomText> */}
+            </View>
+          </View>
+          <CustomText bold color={Theme.COLORS.sub}>Tài khoản</CustomText>
+        </View>
 
-                />
-                <View style={{ height: 90, backgroundColor: 'transparent' }}>
-                </View>
-              </View>
-            )
-          }}
-        />
+        {/* Thông tin cá nhân */}
+        <View>
+          <TouchableOpacity style={styles.card}>
+            <View>
+              <CustomText bold>Thông tin cá nhân</CustomText>
+              <CustomText>Email, địa chỉ, số điện thoai</CustomText>
+            </View>
+            <Ionicons name='chevron-forward-outline' size={28} />
+          </TouchableOpacity>
+        </View>
+        {/* Đơn hàng */}
+        <View>
+          <TouchableOpacity style={styles.card} onPress={() => handlePress(1)}>
+            <View>
+              <CustomText bold>Đơn mua</CustomText>
+              <CustomText>{userInfo?.order_count} đơn hàng</CustomText>
+            </View>
+            <Ionicons name='chevron-forward-outline' size={28} />
+          </TouchableOpacity>
+        </View>
+        {/* Cài đặt */}
+        <View>
+          <TouchableOpacity style={styles.card} onPress={() => navigation.navigate(Router.ChangePassword)}>
+            <View>
+              <CustomText bold>Cài đặt</CustomText>
+              <CustomText>Mật khẩu</CustomText>
+            </View>
+            <Ionicons name='chevron-forward-outline' size={28} />
+          </TouchableOpacity>
+          <CustomButton
+            onPress={_onLogoutPressed}
+            label={'Đăng xuất'}
+            color={Theme.COLORS.lightGrey}
+
+          />
+          <View style={{ height: 90, backgroundColor: 'transparent' }}>
+          </View>
+        </View>
+
       </View>
     </Background>
   );

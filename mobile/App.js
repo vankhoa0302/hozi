@@ -18,6 +18,9 @@ import {
 import ShippingAddressScreen from '@screens/shipping address';
 import CheckoutScreen from '@screens/checkout';
 import SplashScreen from 'react-native-splash-screen';
+import CheckoutSuccess from '@screens/checkout/success';
+import { NavigationContainer } from '@react-navigation/native';
+import LoadingOverlay from '@screens/auth/LoadingOverlay';
 
 const App = () => {
   useEffect(() => {
@@ -28,7 +31,12 @@ const App = () => {
       <View style={{ flex: 1 }}>
         <StatusBar backgroundColor={Theme.COLORS.bg} barStyle='dark-content' />
         <AppNavigator />
+        <LoadingOverlay />
         {/* <CheckoutScreen /> */}
+        {/* <NavigationContainer>
+
+          <CheckoutSuccess />
+        </NavigationContainer> */}
       </View>
     </Provider>
 

@@ -1,15 +1,15 @@
 /* eslint-disable quotes */
 /* eslint-disable prettier/prettier */
-import { FONTWEIGHT, SIZES, Theme, WidthScreen } from "@common/theme";
+import { FONTWEIGHT, HeightScreen, SIZES, Theme, WidthScreen } from "@common/theme";
 import { Platform, StyleSheet } from "react-native";
 
 export const styles = StyleSheet.create({
-    // header: {
-    //     flexDirection: 'row',
-    //     justifyContent: 'space-between',
-    //     alignItems: 'center',
-    //     marginTop: 12,
-    // },
+    loader: {
+        minHeight: HeightScreen / 4,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginBottom: Platform.OS === "ios" ? 70 : 210,
+    },
     search: {
         alignItems: 'center',
         flexDirection: 'row',
@@ -54,8 +54,8 @@ export const styles = StyleSheet.create({
         color: Theme.COLORS.accent,
         fontWeight: FONTWEIGHT.weight500,
     },
-    categoriesTab: {
-        paddingTop: 10,
+    tab: {
+        paddingTop: 12,
         marginLeft: 10,
     },
     category: {
@@ -67,31 +67,30 @@ export const styles = StyleSheet.create({
     },
     productContainer: {
         paddingVertical: 5,
-        paddingBottom: Platform.OS === "ios" ? 50 : 210,
-
+        paddingBottom: Platform.OS === "ios" ? 70 : 100,
     },
     product: {
         margin: 5,
-        padding: 10,
-        backgroundColor: Theme.COLORS.bg,
-        borderRadius: 15,
-        width: WidthScreen / 2 - 25,
+        backgroundColor: Theme.COLORS.white,
+        borderRadius: 8,
+        width: WidthScreen / 2.5,
+        height: HeightScreen / 2.5,
         alignItems: 'center',
-        flexBasis: '46%',
     },
     image: {
-        width: WidthScreen / 3,
-        height: 150,
-        resizeMode: 'contain',
+        borderTopLeftRadius: 8,
+        borderTopRightRadius: 8,
+        width: '100%',
+        height: '100%',
     },
     add: {
         position: 'absolute',
-        right: 10,
-        top: 10,
+        right: 6,
+        bottom: 10,
         zIndex: 1,
         backgroundColor: Theme.COLORS.color2,
-        padding: 5,
-        borderRadius: 9,
+        padding: 6,
+        borderRadius: 20,
         shadowColor: 'black',
         shadowOffset: { width: 0, height: 1 },
         shadowRadius: 2,
@@ -100,20 +99,59 @@ export const styles = StyleSheet.create({
     },
 
     price: {
-        fontWeight: FONTWEIGHT.bold
+        fontWeight: FONTWEIGHT.bold,
     },
-    numberCart:{
-        position:'absolute',
-        right:-8,
-        top:-6,
-        backgroundColor:'red',
-        width:22,
-        borderRadius:12,
-        textAlign:'center',
-        fontSize:11,
-        color:'#fff',
-        borderWidth:1,
-        borderColor:'#fff',
-        paddingTop:2,
+    numberCart: {
+        position: 'absolute',
+        right: -8,
+        top: -6,
+        backgroundColor: 'red',
+        width: 22,
+        borderRadius: 12,
+        textAlign: 'center',
+        fontSize: 11,
+        color: '#fff',
+        borderWidth: 1,
+        borderColor: '#fff',
+        paddingTop: 2,
+    },
+    cateItem: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        width: WidthScreen / 2,
+        height: HeightScreen / 6,
+        marginRight: 8,
+        borderRadius: 12,
+        backgroundColor: Theme.COLORS.lightGrey,
+        justifyContent: 'space-evenly'
+    },
+    titleCate: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        margin: 12,
+    },
+    wrap: {
+        marginTop: 4,
+        width: WidthScreen,
+        height: HeightScreen / 3.8,
+    },
+    wrapImg: {
+        width: '100%',
+        height: '100%',
+    },
+    wrapDot: {
+        position: 'absolute',
+        bottom: 0,
+        flexDirection: 'row',
+        alignSelf: 'center'
+    },
+    dotActive: {
+        margin: 3,
+        color: Theme.COLORS.color2,
+    },
+    dot: {
+        margin: 3,
+        color: 'white',
     }
 });

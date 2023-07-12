@@ -15,6 +15,8 @@ export const Router = {
 
   // explore
   ExploreScreen: 'ExploreScreen',
+  ProductByCategory: 'ProductByCategory',
+
 
   //search
   SearchScreen: 'SearchScreen',
@@ -22,11 +24,18 @@ export const Router = {
   //cart
   CartScreen: 'CartScreen',
   CheckOutScreen: 'CheckOutScreen',
+  CheckoutSuccess: 'CheckoutSuccess',
   OrderScreen: 'OrderScreen',
+  OrderDetail: 'OrderDetail',
+
+
 
   //product
   ProductDetailScreen: 'ProductDetailScreen',
 
   //shipping
   ShippingAddressScreen: 'ShippingAddressScreen',
+
+  ChangePassword: 'ChangePassword',
+
 };

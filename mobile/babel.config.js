@@ -34,9 +34,10 @@ module.exports = {
     }],
     'babel-plugin-transform-inline-environment-variables'
   ],
-  env: {
-    production: {
-      plugins: ['transform-remove-console'],
-    },
-  },
+  // env: {
+  //   production: {
+  //     plugins: ['transform-remove-console'],
+  //   },
+  // },
 };
+

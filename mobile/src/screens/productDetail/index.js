@@ -8,21 +8,27 @@ import { Theme } from "@common/theme";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import CustomText from "@components/CustomText/CustomText";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchgetProductDetail } from "@screens/home/homeSlice";
+import { fetchAddToWish, fetchgetProductDetail } from "@screens/home/homeSlice";
 import { Router } from '../../navigators/router';
 import { fetchAddToCart } from "@screens/cart/cartSlice";
-
+import { formatCurrency } from '../../helpers/helpers'
+import { alert } from '@baronha/ting';
+import { AlertOptions } from '@baronha/ting'
 const ProductDetail = () => {
     const [quantity, setQuantity] = useState(1);
     const [textShown, setTextShown] = useState(false); //To show ur remaining Text
     const [lengthMore, setLengthMore] = useState(false); //to show the "Read more & Less Line
     const [productDetail, setProductDetail] = useState({});
+    const [disaleBtn, setDisableBtn] = useState(false);
 
+    const [wish, setWish] = useState();
     const route = useRoute();
     const navigation = useNavigation();
     const dispatch = useDispatch();
 
     const isLogin = useSelector(state => state.auth.isLogin);
+    const numberCart = useSelector((state) => state.cart.numberCart)
+
 
     const toggleNumberOfLines = () => { //To toggle the show text or hide it
         setTextShown(!textShown);
@@ -37,23 +43,41 @@ const ProductDetail = () => {
         const { payload } = await dispatch(fetchgetProductDetail({
             id: productId,
         }));
-        if (payload.results) {
+        if (payload?.results) {
             let data = payload.results;
+            setWish(data.product_is_favorite);
             setProductDetail(data)
         }
     };
     const addToCart = async () => {
         if (isLogin == true) {
+            setDisableBtn(true);
             let obj = {
                 "product_id": productDetail.product_id,
                 "product_quantity": quantity,
             }
             const { payload } = await dispatch(fetchAddToCart(obj))
-            if(payload?.results){
-                // console.log(payload)
+            if (payload) {
+                const options = {
+                    title: 'Đã thêm vào giỏ !',
+                };
+                alert(options); // easy to use
+                setDisableBtn(false);
             }
         } else {
             navigation.navigate(Router.Login)
+        }
+    }
+    const handleSearch = () => {
+        navigation.navigate('SearchScreen');
+    };
+    const addToWish = async () => {
+        let obj = {
+            product_id: productDetail.product_id
+        }
+        let { payload } = await dispatch(fetchAddToWish(obj))
+        if (payload) {
+            setWish(true)
         }
     }
     useEffect(() => {
@@ -61,26 +85,40 @@ const ProductDetail = () => {
     }, [])
     return (
         <SafeAreaView style={styles.container}>
+            <View style={styles.backAndLove}>
+                <View style={styles.back}>
+                    <TouchableOpacity onPress={() => {
+                        navigation.goBack();
+                    }}>
+                        <Ionicons name="chevron-back-outline" size={25} color={Theme.COLORS.color2} />
+                    </TouchableOpacity>
+                </View>
+                <TouchableOpacity
+                    activeOpacity={.7}
+                    style={styles.search}
+                    onPress={handleSearch}
+                >
+                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                        <Ionicons name={'search-outline'} size={24} color={'black'} />
+                        <CustomText color={Theme.COLORS.sub}>{"  "}{productDetail.product_type}</CustomText>
+                    </View>
+                </TouchableOpacity>
+                <TouchableOpacity
+                    onPress={() => navigation.navigate(Router.CartScreen)}
+                >
+                    <Ionicons name="cart-outline" size={30} color={Theme.COLORS.color2} />
+                    {numberCart > 0
+                        ?
+                        <CustomText style={styles.numberCart}>{numberCart}</CustomText>
+                        : null
+                    }
+                </TouchableOpacity>
+            </View>
             <ScrollView
                 showsVerticalScrollIndicator={false}
             >
                 <View style={styles.imageContainer}>
-                    <View style={styles.backAndLove}>
-                        <View style={styles.back}>
-                            <TouchableOpacity onPress={() => {
-                                navigation.goBack();
-                            }}>
-                                <Ionicons name="chevron-back-outline" size={25} color={Theme.COLORS.color2} />
-                            </TouchableOpacity>
-                        </View>
-                        <View style={styles.back}>
-                            <TouchableOpacity onPress={() => {
-                                navigation.goBack();
-                            }}>
-                                <Ionicons name="heart-outline" size={25} color={Theme.COLORS.color2} />
-                            </TouchableOpacity>
-                        </View>
-                    </View>
+
                     <Image source={{ uri: process.env.APP_URL + productDetail.product_media }} style={styles.image} />
                 </View>
                 <View style={styles.productContainer}>
@@ -90,19 +128,30 @@ const ProductDetail = () => {
                         <CustomText style={styles.name} >{productDetail.product_label}</CustomText>
                         <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                             <View style={{ flexDirection: 'row' }}>
-                                <CustomText bold>{productDetail.product_price}  </CustomText>
-                                {/* <CustomText style={selling_price ? { textDecorationLine: 'line-through' } : null}>{price}</CustomText> */}
+                                <CustomText bold fontSize={18}>{formatCurrency(productDetail.product_price - (productDetail.product_price * productDetail.product_discount / 100))} đ</CustomText>
+                                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                                    <CustomText fontSize={18} style={styles.price}>{formatCurrency(productDetail.product_price)} đ</CustomText>
+                                    <View style={styles.discount}>
+                                        <CustomText bold color={'#fff'}>{productDetail.product_discount}%</CustomText>
+                                    </View>
+                                </View>
                             </View>
-                            <View style={styles.rate}>
+                            <View style={[styles.back, { position: 'absolute', right: 0, bottom: 2 }]}>
+                                <TouchableOpacity disabled={productDetail.product_is_favorite == 1} onPress={addToWish}>
+                                    <Ionicons name={wish == 0 ? "heart-outline" : "heart"} size={25} color={wish == 0 ? Theme.COLORS.color2 : Theme.COLORS.danger} />
+
+                                </TouchableOpacity>
+                            </View>
+                            {/* <View style={styles.rate}>
                                 <Ionicons name="star" size={16} color={'#ffbf00'} />
                                 <CustomText bold color={'#ffbf00'}>{" "}{ }{productDetail.product_evaluate}</CustomText>
-                            </View>
+                            </View> */}
                         </View>
                     </View>
 
                     {/* Mô tả sản phẩm */}
                     <View style={{ marginTop: 12 }}>
-                        <CustomText bold>Mô tả</CustomText>
+                        <CustomText bold fontSize={16}>Mô tả</CustomText>
                         <View>
                             <CustomText
                                 onTextLayout={onTextLayout}
@@ -115,10 +164,7 @@ const ProductDetail = () => {
                                     <TouchableOpacity
                                         onPress={toggleNumberOfLines}
                                         style={{
-                                            marginTop: 12,
                                             padding: 8,
-                                            borderTopColor: Theme.COLORS.grey,
-                                            borderTopWidth: 1,
                                             flexDirection: 'row',
                                             justifyContent: 'center',
                                         }}
@@ -134,7 +180,7 @@ const ProductDetail = () => {
                     </View>
                     {/* Đánh giá sản phẩm */}
                     <View style={{}}>
-                        <CustomText bold>Đánh giá</CustomText>
+                        <CustomText bold fontSize={16}>Đánh giá</CustomText>
                         <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                             <View style={{ flexDirection: 'row' }}>
                                 {'qwt'.split('').map(item => {
@@ -155,38 +201,33 @@ const ProductDetail = () => {
             </ScrollView>
             <View style={styles.footer}>
                 <View style={styles.quantityContainer}>
-                    <View style={{ flexDirection: 'row' }}>
-                        <CustomText bold>Màu sắc: </CustomText>
-                        <TouchableOpacity style={[styles.color, { backgroundColor: 'red' }]}></TouchableOpacity>
-                        <TouchableOpacity style={[styles.color, { backgroundColor: 'grey' }]}></TouchableOpacity>
-                        <TouchableOpacity style={[styles.color, { backgroundColor: 'black' }]}></TouchableOpacity>
-
-                    </View>
-
-                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                        <TouchableOpacity onPress={() => {
-                            if (quantity > 1) {
-                                setQuantity(quantity - 1);
-                            }
-                        }}>
-                            <View style={styles.quantityIcon}>
-                                <Ionicons name="remove-outline" size={10} color={Theme.COLORS.primary} />
-                            </View>
-                        </TouchableOpacity>
-                        <CustomText style={styles.quantity}>{quantity}</CustomText>
-                        <TouchableOpacity onPress={() => {
-                            setQuantity(quantity + 1);
-                        }}>
-                            <View style={styles.quantityIcon}>
-                                <Ionicons name="add-outline" size={10} color={Theme.COLORS.primary} />
-                            </View>
-                        </TouchableOpacity>
+                    <View style={{ flexDirection: 'row', alignItems: 'center', alignSelf: 'flex-end' }}>
+                        <CustomText bold>Số lượng: </CustomText>
+                        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                            <TouchableOpacity onPress={() => {
+                                if (quantity > 1) {
+                                    setQuantity(quantity - 1);
+                                }
+                            }}>
+                                <View style={styles.quantityIcon}>
+                                    <Ionicons name="remove-outline" size={10} color={Theme.COLORS.primary} />
+                                </View>
+                            </TouchableOpacity>
+                            <CustomText style={styles.quantity}>{quantity}</CustomText>
+                            <TouchableOpacity onPress={() => {
+                                setQuantity(quantity + 1);
+                            }}>
+                                <View style={styles.quantityIcon}>
+                                    <Ionicons name="add-outline" size={10} color={Theme.COLORS.primary} />
+                                </View>
+                            </TouchableOpacity>
+                        </View>
                     </View>
                 </View>
-                <TouchableOpacity onPress={addToCart} activeOpacity={.5} style={styles.addToCartContainer}>
+                <TouchableOpacity disabled={disaleBtn} onPress={addToCart} activeOpacity={.5} style={styles.addToCartContainer}>
                     <CustomText style={styles.addToBasket}>Thêm vào giỏ</CustomText>
-                    <View style={{ width: 1, backgroundColor: '#fff', height: '100%', marginHorizontal: 12 }}>
-                    </View>
+                    {/* <View style={{ width: 1, backgroundColor: '#fff', height: '100%', marginHorizontal: 12 }}>
+                    </View> */}
                     <View style={styles.priceContainer}>
                         {/* <CustomText style={styles.price}>$ {(selling_price ? selling_price : price) * quantity}</CustomText> */}
                     </View>

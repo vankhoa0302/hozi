@@ -32,7 +32,7 @@ export const fetchLogout = createAsyncThunk(
 );
 //fetch register
 const register = (options) => {
-    let url = `/api/user-register`;
+    let url = `api/user/register`;
     return axiosService.post(url, options);
 };
 export const fetchRegister = createAsyncThunk(
@@ -55,12 +55,16 @@ export const authSlice = createSlice({
             state.isLogin = action.payload;
         },
     },
-    extraReducers: {
-        [fetchLogin.fulfilled]: (state, { payload }) => {
+    extraReducers: (builder) => {
+        builder.addCase(fetchLogin.fulfilled, (state, { payload }) => {
             let token = payload.token_type + " " + payload.access_token;
             AsyncStorage.setItem('token', token);
             AsyncStorage.setItem('refresh_token', payload.refresh_token);
-        },
+        });
+        builder.addCase(fetchLogout.fulfilled, (state, { payload }) => {
+            AsyncStorage.clear();
+            state.isLogin = false;
+        });
     }
 })
 const { actions, reducer } = authSlice;
